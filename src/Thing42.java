@@ -185,4 +185,44 @@ public class Thing42<K,D> implements Thing42orNull<K,D> {
     public void setData(D newData) {
         this.data = newData;
     }
+    
+		/**
+	 * Check if this Thing42 equals Object o.
+	 *
+	 * @param o - the object to check for equality
+	 * @return true if this is equal to o, false otherwise
+	 */
+	@Override
+	public boolean equals(Object o){
+		if (this == o){
+			return true;
+		}
+		if (!(o instanceof Thing42)){
+			return false;
+		}
+		Thing42 thing = (Thing42) o;
+		// perform == check first, if referencing same object, faster test
+		// if not, check that both are not null, and equal
+		// o.equals(null) will return false
+		return (KEY == thing.getKey() || KEY != null && KEY.equals(thing.getKey()))
+				&& (data == thing.getData() || data != null && data.equals(thing.getData()))
+				&& LEVEL == thing.getLevel();
+	}
+	
+	/**
+	 * Compute this Thing42's hashcode.
+	 *
+	 * @return hash code for this Thing42
+	 */
+	@Override
+	public int hashCode(){
+		int prime = 17;
+		int result = 1;
+		Long l = new Long(LEVEL);
+		// to avoid NPE, if key or data is null, use 0, if not, use their hash
+		result = prime * result + ((KEY == null) ? 0 : KEY.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((l == null) ? 0 : l.hashCode());
+		return result;
+	}
 }
