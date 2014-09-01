@@ -70,9 +70,9 @@ public class Thing42Test
         //Should add successfully
         testThing.addPeer(validThing);
         assertTrue(testThing.getPeersAsCollection().size() == 1);
-        //Shouldn't add duplicate
+        //SHOULD add duplicate
         testThing.addPeer(validThing);
-        assertTrue(testThing.getPeersAsCollection().size() == 1); 
+        assertTrue(testThing.getPeersAsCollection().size() == 2); 
     }
 
     /**
