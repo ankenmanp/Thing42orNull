@@ -56,7 +56,30 @@ public class Thing42Test
         validThing = null; 
     }
     
-    
+        /**
+     * Tests Constructor for Thing42(K key, long level, D data).
+     * Verifies multiple data types are allowed/enforced when specifying upon construction.
+     */
+    @Test
+    public void constructorTest() {
+        // parameters set as integers
+        Thing42<Integer, Integer> integerTest = new Thing42<Integer, Integer>(1, 1, 1);
+        assertNotNull(integerTest);
+        assertTrue(integerTest.getKey() == 1);
+        assertTrue(integerTest.getData() == 1);
+        assertTrue(integerTest.getLevel() == 1);
+        // parameters set as strings
+        Thing42<String, String> stringTest = new Thing42<String, String>("Hello", 5, "World");
+        assertTrue(stringTest.getKey().equals("Hello"));
+        assertTrue(stringTest.getLevel() == 5);
+        assertTrue(stringTest.getData().equals("World"));
+        // parameters are set differently, includes a double
+        Thing42<Double, String> variableTest = new Thing42<Double, String>(3.14159, 5, "Don't Panic");
+        assertTrue(variableTest.getKey().equals(3.14159));
+        assertTrue(variableTest.getLevel() == 5);
+        assertTrue(variableTest.getData().equals("Don't Panic"));
+
+    }
     /**
      * Attempts to add both null and a Thing42 object
      * to the peer collection of a Thing42 object. Also 
