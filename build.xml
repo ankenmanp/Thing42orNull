@@ -43,11 +43,14 @@
       <classpath>
         <path refid="classpath"/>
         <path location="${build}"/>
+      	<fileset dir="${lib}">
+            <include name="**/junit.jar" />
+        </fileset>
       </classpath>
       <formatter type="xml"/>
       <formatter type="plain"/>
       <batchtest fork="yes" todir="${reports}">
-        <fileset dir="${src}" includes="**/*Test.java" />
+        <fileset dir="${build}" includes="**/*Test.java" />
       </batchtest>
     </junit>
     <fail message="Test failure detected, check test results." if="test.failed" />
