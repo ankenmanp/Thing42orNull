@@ -50,7 +50,7 @@
       <formatter type="xml"/>
       <formatter type="plain"/>
       <batchtest fork="yes" todir="${reports}">
-        <fileset dir="${build}" includes="**/*Test.java" />
+        <fileset dir="${build}" includes="**/*Test.class" />
       </batchtest>
     </junit>
     <fail message="Test failure detected, check test results." if="test.failed" />
