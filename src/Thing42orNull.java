@@ -93,4 +93,20 @@ interface Thing42orNull<K, D> {
      * @param newData the updated data for this object
      */
 	void setData(D newData);
+	
+	/**
+	 * Indicates whether some other object is equal to this one.
+	 * 
+	 * @param o - the reference object with which to compare
+	 * @return true if this object is the same as o; false otherwise.
+	 */
+	boolean equals(Object o);
+	
+	/**
+	 * Returns an integer hash code value for the object. This method is
+	 * supported for hash tables such as those provided by HashMap.
+	 * 
+	 * @return this object's hash code.
+	 */
+	int hashCode();
 }
