@@ -142,6 +142,18 @@ public class Thing42Test
     }
     
     /**
+     * Attempts twice to get the pool as list.
+     *  The first time, the pool is empty,
+     *  the second time, the pool has 1 object
+     */
+    @Test
+    public void testGetPoolAsList()    {
+    	assertTrue(testThing.getPoolAsList().size() == 0);        
+        testThing.appendToPool(validThing);
+        assertTrue(testThing.getPoolAsList().size() == 1);
+    }
+    
+    /**
      * Attempts to retrieve from a Thing42 object 
      * a list of peers containing a given key.  
      */
