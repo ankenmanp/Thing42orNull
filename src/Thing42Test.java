@@ -81,15 +81,13 @@ public class Thing42Test
 
     }
     /**
-     * Attempts to add both null and a Thing42 object
+     * Attempts to add a Thing42 object
      * to the peer collection of a Thing42 object. Also 
      * attempts to add a duplicate peer. 
      */
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAddPeer() 
-    {
-        //Should throw exception
-        testThing.addPeer(null);
+    {        
         //Should add successfully
         testThing.addPeer(validThing);
         assertTrue(testThing.getPeersAsCollection().size() == 1);
@@ -97,19 +95,39 @@ public class Thing42Test
         testThing.addPeer(validThing);
         assertTrue(testThing.getPeersAsCollection().size() == 2); 
     }
-
+    
     /**
-     * Attempts to add both null and a Thing42 object
-     * to the pool collection of a Thing42 object. 
+     * Attempts to add null
+     * to the peer collection of a Thing42 object.
      */
     @Test(expected = NullPointerException.class)
-    public void testAppendMember()
+    public void testAddNullPeer() 
     {
         //Should throw exception
-        testThing.appendToPool(null);
+        testThing.addPeer(null);        
+    }
+
+    /**
+     * Attempts to add a Thing42 object
+     * to the pool collection of a Thing42 object. 
+     */
+    @Test
+    public void testAppendMember()
+    {       
         //Should add successfully
         testThing.appendToPool(validThing);
         assertTrue(testThing.getPoolAsList().size() == 1); 
+    }
+    
+    /**
+     * Attempts to add null into pool collection 
+     * of a Thing42 object
+     */
+    @Test(expected = NullPointerException.class)
+    public void testAppendNullMember()
+    {
+        //Should throw exception
+        testThing.appendToPool(null);        
     }
     
     /**
@@ -172,34 +190,51 @@ public class Thing42Test
     }
     
     /**
-     * Attempts to remove a Thing42 object from the pool
+     * Attempt to remove a Thing42 object from the pool
      * of another Thing42 object. 
      */
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveFromPool() 
     {
-        testThing.appendToPool(validThing);
-        
-        //Should throw NullPointerException
-        testThing.removeFromPool(null);
-        
+        testThing.appendToPool(validThing);        
         assertTrue(testThing.removeFromPool(validThing));
     }
     
+    
     /**
-     * Attempts to remove a Thing42 object from the peer collection
-     * of another Thing42 object. 
+     * Attempt to remove null object from the pool
      */
     @Test(expected = NullPointerException.class)
+    public void testRemoveNullFromPool()
+    {
+        //Should throw NullPointerException
+        testThing.removeFromPool(null);
+    }
+    
+    
+    /**
+     * Attempt to remove a Thing42 object from the peer collection
+     * of another Thing42 object. 
+     */
+    @Test
     public void testRemovePeer()
     {
         testThing.addPeer(validThing);
+         assertTrue(testThing.removePeer(validThing)); 
         
-        //Should throw NullPointerException
-        testThing.removePeer(null);
-        
-        assertTrue(testThing.removePeer(validThing)); 
     }
+    
+    /**Attempt to remove null from peer Collection
+     * 
+     */    
+    @Test(expected = NullPointerException.class)
+    public void testRemoveNullPeer()
+    {
+      //Should throw NullPointerException
+        testThing.removePeer(null);      
+    }
+    
+   
 	
 	/**
      * Tests equivalence relations for equals method on non-null objects
@@ -213,7 +248,7 @@ public class Thing42Test
     @Test
     public void testEquals(){
     	//reflexive:
-    	assertTrue(testThing.equals(testThing));
+    	assertTrue(testThing.equals(testThing)); 
     	assertFalse(testThing.equals(validThing));
     	
     	//symmetric:
