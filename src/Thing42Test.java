@@ -200,6 +200,123 @@ public class Thing42Test
         
         assertTrue(testThing.removePeer(validThing)); 
     }
+	
+	/**
+     * Tests equivalence relations for equals method on non-null objects
+     * reflexive: x.equals(x) should return true
+     * symmetric: x.equals(y) == y.equals(x)
+     * transitive: x.equals(y) == y.equals(z) == x.equals(z)
+     * consistent: x.equals(y) should always return the same result if no
+     * 			   changes to either x or y
+     * x.equals(null) should return false 
+     */
+    @Test
+    public void testEquals(){
+    	//reflexive:
+    	assertTrue(testThing.equals(testThing));
+    	assertFalse(testThing.equals(validThing));
+    	
+    	//symmetric:
+    	Thing42<Integer, String> thing1 = new Thing42<Integer,String>(1, 1, "test");
+    	assertTrue(testThing.equals(thing1));
+    	assertTrue(thing1.equals(testThing));
+    	
+    	//transitive:
+    	Thing42<Integer, String> thing2 = new Thing42<Integer,String>(1, 1, "test");
+    	assertTrue(testThing.equals(thing1));
+    	assertTrue(thing1.equals(testThing));
+    	assertTrue(testThing.equals(thing2));
+    	assertTrue(thing2.equals(testThing));
+    	assertTrue(thing1.equals(thing2));
+    	assertTrue(thing2.equals(thing1));
+    	
+    	//null
+    	Thing42<Integer, String> nullThing = null;
+    	assertFalse(testThing.equals(nullThing));
+    	
+    	//consistent:
+    	for (int i = 0; i < 100; i ++){
+    		assertTrue(testThing.equals(thing1));
+    		assertFalse(testThing.equals(validThing));
+    		assertFalse(testThing.equals(nullThing));
+    	}
+    }
+    
+    /**
+     * Tests equality using peers and pool with same memory referenced Thing42s
+     * in them, as well as equal Thing42s with different memory references.
+     */
+    @Test
+    public void testEqualsPeersAndPool(){
+    	Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+		Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+		
+		// peers and pool with same memory references
+		Thing42<Integer, String> newThing;
+		for (int i = 1; i < 15; i++){
+			newThing = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+			thing1.addPeer(newThing);
+			thing1.appendToPool(newThing);
+			thing2.addPeer(newThing);
+			thing2.appendToPool(newThing);
+		}
+		
+		assertFalse(thing1 == thing2);
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing2.equals(thing1));
+		
+		// peers and pool with different memory references, still equal
+		thing1 = new Thing42<Integer, String>(0, 0, "test");
+		thing2 = new Thing42<Integer, String>(0, 0, "test");
+		
+		Thing42<Integer, String> newThing1;
+		Thing42<Integer, String> newThing2;
+		for (int i = 1; i < 15; i++){
+			newThing1 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+			thing1.addPeer(newThing1);
+			thing1.appendToPool(newThing1);
+			
+			newThing2 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+			thing2.addPeer(newThing2);
+			thing2.appendToPool(newThing2);
+		}
+		
+		assertFalse(thing1 == thing2);
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing2.equals(thing1));
+    }
+    
+    /**
+     * Tests hashCode to the general contract of hashCode:
+     * 1) The same object shall consistently return the same hashCode, provided no
+     * information is modified.
+     * 2) If two objects are equal according to equals(Object), then they shall
+     * have the same hashCode()
+     * 
+     * Does not test 3) if two objects have the same hashCode, it is not
+     * necessary that they be equal according to equals(Object).
+     */
+    @Test
+    public void testHashCode(){
+    	// 1)
+		final int result = testThing.hashCode();
+		for (int i = 0; i < 100; i++){
+			assertTrue(result == testThing.hashCode());
+		}
+		testThing.setData("modified");
+		assertFalse(result == testThing.hashCode());
+		
+		// 2)
+		Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+		Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing1.hashCode() == thing2.hashCode());
+		
+		thing1.setData("modified");
+		thing2.setData("modified");
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing1.hashCode() == thing2.hashCode());
+    }
 }
 
 
