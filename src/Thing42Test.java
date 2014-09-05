@@ -233,8 +233,8 @@ public class Thing42Test
         
     }
     
-    /**Attempt to remove null from peer Collection
-     * 
+    /**
+     * Attempt to remove null from peer Collection
      */    
     @Test(expected = NullPointerException.class)
     public void testRemoveNullPeer()
@@ -243,9 +243,7 @@ public class Thing42Test
         testThing.removePeer(null);      
     }
     
-   
-	
-	/**
+   /**
      * Tests equivalence relations for equals method on non-null objects
      * reflexive: x.equals(x) should return true
      * symmetric: x.equals(y) == y.equals(x)
@@ -256,7 +254,7 @@ public class Thing42Test
      */
     @Test
     public void testEquals(){
-    	//reflexive:
+        //reflexive:
     	assertTrue(testThing.equals(testThing)); 
     	assertFalse(testThing.equals(validThing));
     	
@@ -280,9 +278,9 @@ public class Thing42Test
     	
     	//consistent:
     	for (int i = 0; i < 100; i ++){
-    		assertTrue(testThing.equals(thing1));
-    		assertFalse(testThing.equals(validThing));
-    		assertFalse(testThing.equals(nullThing));
+    	    assertTrue(testThing.equals(thing1));
+    	    assertFalse(testThing.equals(validThing));
+    	    assertFalse(testThing.equals(nullThing));
     	}
     }
     
@@ -292,42 +290,124 @@ public class Thing42Test
      */
     @Test
     public void testEqualsPeersAndPool(){
-    	Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
-		Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+	Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
 		
-		// peers and pool with same memory references
-		Thing42<Integer, String> newThing;
-		for (int i = 1; i < 15; i++){
-			newThing = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-			thing1.addPeer(newThing);
-			thing1.appendToPool(newThing);
-			thing2.addPeer(newThing);
-			thing2.appendToPool(newThing);
-		}
+	// peers and pool with same memory references
+	Thing42<Integer, String> newThing;
+	for (int i = 1; i < 15; i++){
+	    newThing = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+	    thing1.addPeer(newThing);
+	    thing1.appendToPool(newThing);
+	    thing2.addPeer(newThing);
+	    thing2.appendToPool(newThing);
+	}
 		
-		assertFalse(thing1 == thing2);
-		assertTrue(thing1.equals(thing2));
-		assertTrue(thing2.equals(thing1));
+	assertFalse(thing1 == thing2);
+	assertTrue(thing1.equals(thing2));
+	assertTrue(thing2.equals(thing1));
 		
-		// peers and pool with different memory references, still equal
-		thing1 = new Thing42<Integer, String>(0, 0, "test");
-		thing2 = new Thing42<Integer, String>(0, 0, "test");
+	// peers and pool with different memory references, still equal
+	thing1 = new Thing42<Integer, String>(0, 0, "test");
+	thing2 = new Thing42<Integer, String>(0, 0, "test");
 		
-		Thing42<Integer, String> newThing1;
-		Thing42<Integer, String> newThing2;
-		for (int i = 1; i < 15; i++){
-			newThing1 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-			thing1.addPeer(newThing1);
-			thing1.appendToPool(newThing1);
+	Thing42<Integer, String> newThing1;
+	Thing42<Integer, String> newThing2;
+	for (int i = 1; i < 15; i++){
+	    newThing1 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+	    thing1.addPeer(newThing1);
+	    thing1.appendToPool(newThing1);
 			
-			newThing2 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-			thing2.addPeer(newThing2);
-			thing2.appendToPool(newThing2);
-		}
+	    newThing2 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+	    thing2.addPeer(newThing2);
+	    thing2.appendToPool(newThing2);
+	}
 		
-		assertFalse(thing1 == thing2);
-		assertTrue(thing1.equals(thing2));
-		assertTrue(thing2.equals(thing1));
+	assertFalse(thing1 == thing2);
+	assertFalse(thing1.equals(thing2));
+	assertFalse(thing2.equals(thing1));
+    }
+
+    /**
+     * Tests equality of two Thing42 objects.
+     * If the pool or peers of the comparing Thing42s is different,
+     * the Thing42s are unequal. If the pool/peers are the same, as
+     * well as all other fields, the compared Thing42s are the equal.
+     * Note that the peers list is unordered and the final test in this
+     * method assertsTrue if thing1 is equal to thing 2 with out of order
+     * peers lists, but still equal peers lists. 
+    */
+    @Test
+    public void testEqualsAgain() {
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing3 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing4 = new Thing42<Integer, String>(0, 0, "test");
+
+        // As expected, the address of thing1 and thing2 are the different
+        assertFalse(thing1 == thing2);
+
+        // This is also expected because our equals method determines these objects are equal
+        assertTrue(thing1.equals(thing2));
+        assertTrue(thing2.equals(thing1));
+
+        // Adding the same things to each thing1 and thing2s pool
+        thing1.appendToPool(thing3);
+        thing2.appendToPool(thing3);
+ 
+        // Showing that if the same object exists in each pool, the pools are identical
+        // and therefore, under current conditions, so are the compared Thing42s.
+        assertTrue(thing1.equals(thing2));
+        assertTrue(thing2.equals(thing1));
+ 
+        // Adding the same things to each thing1 and thing2s peers
+        thing1.addPeer(thing3);
+        thing2.addPeer(thing3);
+ 
+        // Showing that if the same object exists in each peers list, the peers lists are identical
+        // and therefore, under current conditions, so are the compared Thing42s.
+        assertTrue(thing1.equals(thing2));
+        assertTrue(thing2.equals(thing1));
+ 
+        // Now we append different objects to each pool to make compared Thing42s unequal
+        thing1.appendToPool(thing3);
+        thing2.appendToPool(thing4);
+
+        // Showing that if different objects exist in each pool, the compared pools are unequal
+        // and therefore, the compared Thing42s are unequal
+        assertFalse(thing1.equals(thing2));
+        assertFalse(thing2.equals(thing1));
+ 
+        // Remove unequal objects from pool to again make compared Things equal again
+        thing1.removeFromPool(thing3);
+        thing1.removeFromPool(thing3);
+        thing2.removeFromPool(thing3);
+        thing2.removeFromPool(thing4);
+ 
+        // Ensure Things are equal once again
+        assertTrue(thing1.equals(thing2));
+        assertTrue(thing2.equals(thing1));
+
+        // Now we add different objects to each peers list to make compared 
+        // Thing42s unequal
+        thing1.addPeer(thing3);
+        thing2.addPeer(thing4);
+ 
+        // Showing that if different objects exist in each peers list, the 
+        // compared peers lists are unequal and therefore, the compared
+        // Thing42s are unequal
+        assertFalse(thing1.equals(thing2));
+        assertFalse(thing2.equals(thing1));
+
+        // Now we add the opposite things (4 & 3) from which we addded to the
+        // previous things (1 & 2) to make peers equal, sans equal order
+        thing1.addPeer(thing4);
+        thing2.addPeer(thing3);
+
+        // Showing that if the same objects exist in comparing Thing42s,
+        // regardless of the peers list order, compared Thing42s are equal
+        assertTrue(thing1.equals(thing2));
+        assertTrue(thing2.equals(thing1));
     }
     
     /**
