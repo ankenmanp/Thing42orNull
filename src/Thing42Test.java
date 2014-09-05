@@ -2,6 +2,8 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The test class Thing42Test.
@@ -41,7 +43,7 @@ public class Thing42Test
     public void setUp()
     {
         testThing = new Thing42<Integer,String>(1, 1, "test");
-        validThing = new Thing42<Integer,String>(2,2,"test"); 
+        validThing = new Thing42<Integer,String>(2,2,"test");
     }
 
     /**
@@ -93,7 +95,7 @@ public class Thing42Test
         assertTrue(testThing.getPeersAsCollection().size() == 1);
         //SHOULD add duplicate
         testThing.addPeer(validThing);
-        assertTrue(testThing.getPeersAsCollection().size() == 2); 
+        assertTrue(testThing.getPeersAsCollection().size() == 2);
     }
     
     /**
@@ -113,10 +115,14 @@ public class Thing42Test
      */
     @Test
     public void testAppendMember()
-    {       
+    {
+        // check testThing's pool doesn't have validThing yet
+        assertTrue(testThing.getPoolAsList().size() == 0);
+        assertFalse(testThing.getPoolAsList().contains(validThing));
         //Should add successfully
         testThing.appendToPool(validThing);
-        assertTrue(testThing.getPoolAsList().size() == 1); 
+        assertTrue(testThing.getPoolAsList().size() == 1);
+        assertTrue(testThing.getPoolAsList().contains(validThing));
     }
     
     /**
@@ -142,7 +148,7 @@ public class Thing42Test
         assertNull(testThing.getOnePeer(0));
         //Should return the object when it IS found
         testThing.addPeer(validThing);
-        assertEquals(validThing, testThing.getOnePeer(2)); 
+        assertEquals(validThing, testThing.getOnePeer(2));
     }
     
     /**
@@ -157,6 +163,7 @@ public class Thing42Test
         
         testThing.addPeer(validThing);
         assertTrue(testThing.getPeersAsCollection().size() == 1);
+        assertTrue(testThing.getPeersAsCollection().contains(validThing));
     }
     
     /**
@@ -169,6 +176,7 @@ public class Thing42Test
     	assertTrue(testThing.getPoolAsList().size() == 0);        
         testThing.appendToPool(validThing);
         assertTrue(testThing.getPoolAsList().size() == 1);
+        assertTrue(testThing.getPoolAsList().contains(validThing));
     }
     
     /**
@@ -220,7 +228,8 @@ public class Thing42Test
     public void testRemovePeer()
     {
         testThing.addPeer(validThing);
-         assertTrue(testThing.removePeer(validThing)); 
+        assertTrue(testThing.removePeer(validThing));
+        assertTrue(testThing.getPeersAsCollection().size() == 0);
         
     }
     
@@ -230,7 +239,7 @@ public class Thing42Test
     @Test(expected = NullPointerException.class)
     public void testRemoveNullPeer()
     {
-      //Should throw NullPointerException
+        //Should throw NullPointerException
         testThing.removePeer(null);      
     }
     
