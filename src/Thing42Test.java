@@ -230,7 +230,6 @@ public class Thing42Test
         testThing.addPeer(validThing);
         assertTrue(testThing.removePeer(validThing));
         assertTrue(testThing.getPeersAsCollection().size() == 0);
-        
     }
     
     /**
@@ -291,41 +290,50 @@ public class Thing42Test
     @Test
     public void testEqualsPeersAndPool(){
         Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
-	Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
-		
-	// peers and pool with same memory references
-	Thing42<Integer, String> newThing;
-	for (int i = 1; i < 15; i++){
-	    newThing = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-	    thing1.addPeer(newThing);
-	    thing1.appendToPool(newThing);
-	    thing2.addPeer(newThing);
-	    thing2.appendToPool(newThing);
-	}
-		
-	assertFalse(thing1 == thing2);
-	assertTrue(thing1.equals(thing2));
-	assertTrue(thing2.equals(thing1));
-		
-	// peers and pool with different memory references, still equal
-	thing1 = new Thing42<Integer, String>(0, 0, "test");
-	thing2 = new Thing42<Integer, String>(0, 0, "test");
-		
-	Thing42<Integer, String> newThing1;
-	Thing42<Integer, String> newThing2;
-	for (int i = 1; i < 15; i++){
-	    newThing1 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-	    thing1.addPeer(newThing1);
-	    thing1.appendToPool(newThing1);
-			
-	    newThing2 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
-	    thing2.addPeer(newThing2);
-	    thing2.appendToPool(newThing2);
-	}
-		
-	assertFalse(thing1 == thing2);
-	assertFalse(thing1.equals(thing2));
-	assertFalse(thing2.equals(thing1));
+    	Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+    		
+    	// peers and pool with same memory references
+    	Thing42<Integer, String> newThing;
+    	for (int i = 1; i < 15; i++){
+    	    newThing = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+    	    thing1.addPeer(newThing);
+    	    thing1.appendToPool(newThing);
+    	    thing2.addPeer(newThing);
+    	    thing2.appendToPool(newThing);
+    	}
+    		
+    	assertFalse(thing1 == thing2);
+    	assertTrue(thing1.equals(thing2));
+    	assertTrue(thing2.equals(thing1));
+    		
+    	// peers and pool with different memory references, still equal
+    	thing1 = new Thing42<Integer, String>(0, 0, "test");
+    	thing2 = new Thing42<Integer, String>(0, 0, "test");
+    		
+    	Thing42<Integer, String> newThing1;
+    	Thing42<Integer, String> newThing2;
+    	for (int i = 1; i < 15; i++){
+    	    newThing1 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+    	    thing1.addPeer(newThing1);
+    	    thing1.appendToPool(newThing1);
+    			
+    	    newThing2 = new Thing42<Integer, String>(i, i, Character.toString((char) i));
+    	    thing2.addPeer(newThing2);
+    	    thing2.appendToPool(newThing2);
+    	}
+    		
+    	assertFalse(thing1 == thing2);
+    	assertTrue(thing1.equals(thing2));
+    	assertTrue(thing2.equals(thing1));
+    }
+
+    @Test(expected = StackOverflowError.class)
+    public void testEqualsInfiniteLoop() {
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+        thing1.addPeer(thing1);
+        thing2.addPeer(thing2);
+        thing1.equals(thing2);      
     }
 
     /**

@@ -194,19 +194,21 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
 	 */
 	@Override
 	public boolean equals(Object o){
-		if (this == o){
-			return true;
-		}
-		if (!(o instanceof Thing42<?, ?>)){
-			return false;
-		}
-		Thing42<K, D> thing = (Thing42<K, D>) o;
-		// perform == check first, if referencing same object, faster test
-		// if not, check that both are not null, and equal
-		// o.equals(null) will return false
-		return (KEY == thing.getKey() || KEY != null && KEY.equals(thing.getKey()))
-				&& (data == thing.getData() || data != null && data.equals(thing.getData()))
-				&& LEVEL == thing.getLevel();
+        Thing42<K, D> thing = (Thing42<K, D>) o;
+
+		if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof Thing42))
+        {
+            return false;
+        }
+        return LEVEL == thing.getLevel()
+            && KEY.equals(thing.getKey())
+            && data.equals(thing.getData())
+            && this.getPeersAsCollection().equals(thing.getPeersAsCollection())
+            && this.getPoolAsList().equals(thing.getPoolAsList());
 	}
 	
 	/**
