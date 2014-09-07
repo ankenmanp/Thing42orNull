@@ -349,8 +349,8 @@ public class Thing42Test
     public void testEqualsAgain() {
         Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
         Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
-        Thing42<Integer, String> thing3 = new Thing42<Integer, String>(0, 0, "test");
-        Thing42<Integer, String> thing4 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing3 = new Thing42<Integer, String>(1, 1, "test");
+        Thing42<Integer, String> thing4 = new Thing42<Integer, String>(2, 2, "test");
 
         // As expected, the address of thing1 and thing2 are the different
         assertFalse(thing1 == thing2);
@@ -388,8 +388,6 @@ public class Thing42Test
  
         // Remove unequal objects from pool to again make compared Things equal again
         thing1.removeFromPool(thing3);
-        thing1.removeFromPool(thing3);
-        thing2.removeFromPool(thing3);
         thing2.removeFromPool(thing4);
  
         // Ensure Things are equal once again
