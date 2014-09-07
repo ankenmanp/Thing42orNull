@@ -449,6 +449,26 @@ public class Thing42Test
 		assertTrue(thing1.equals(thing2));
 		assertTrue(thing1.hashCode() == thing2.hashCode());
     }
+	
+	@Test
+	public void testHashCodePeersAndPool(){
+		Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+		Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing1.hashCode() == thing2.hashCode());
+		
+		Thing42<Integer, String> thing3 = new Thing42<Integer, String>(1, 1, "Test");
+		Thing42<Integer, String> thing4 = new Thing42<Integer, String>(1, 1, "Test");
+		assertTrue(thing3.equals(thing4));
+		assertTrue(thing3.hashCode() == thing4.hashCode());
+		
+		thing1.addPeer(thing3);
+		thing2.addPeer(thing4);
+		thing1.appendToPool(thing4);
+		thing2.appendToPool(thing3);
+		assertTrue(thing1.equals(thing2));
+		assertTrue(thing1.hashCode() == thing2.hashCode());
+	}
 }
 
 

@@ -224,7 +224,9 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
 		// to avoid NPE, if key or data is null, use 0, if not, use their hash
 		result = prime * result + ((KEY == null) ? 0 : KEY.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		result = prime * result + ((l == null) ? 0 : l.hashCode());
+		result = prime * result + l.hashCode();
+		result = prime * result + peers.hashCode();
+		result = prime * result + pool.hashCode();
 		return result;
 	}
 }
