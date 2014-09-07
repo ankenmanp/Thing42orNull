@@ -114,7 +114,7 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
      * @return every peer stored in this object
      */
     public Collection<Thing42orNull<K, D>> getPeersAsCollection() {
-        Iterator iterator = peers.keySet().iterator();
+        Iterator<K> iterator = peers.keySet().iterator();
         ArrayList<Thing42orNull<K, D>> allPeers = new ArrayList<Thing42orNull<K, D>>(0);
         while(iterator.hasNext()) {
             K k = (K)iterator.next();
@@ -194,6 +194,7 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
 	 */
 	@Override
 	public boolean equals(Object o){
+	@SuppressWarnings("unchecked")
         Thing42<K, D> thing = (Thing42<K, D>) o;
 
 		if (this == o)
