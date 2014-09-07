@@ -15,7 +15,7 @@ import java.util.List;
  *</p>
  * @param <K> the type of key
  * @param <D> the type of data
- * @author
+ * @author Dr. Jody Paul
  * @version 0.1.0
  */
 public interface Thing42orNull<K, D> {

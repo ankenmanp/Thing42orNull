@@ -14,7 +14,13 @@ import java.util.Collection;
  * because testing them would equate to testing the Java API rather than
  * the Thing42 class. 
  *
- * @author  Jamie Wohletz
+ * @author Jamie Wohletz
+ * @author Stephen Yugel
+ * @author Kim Bui
+ * @author Eric Van Gelder
+ * @author Sterling Zerr
+ * @author Chris Moquin
+ * @author Paul Ankenman
  * @version 8/21/14
  */
 public class Thing42Test
