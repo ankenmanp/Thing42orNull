@@ -138,7 +138,7 @@ public class Thing42<K, D> extends Object implements Thing42orNull<K, D> {
      * @return all peers known by this object; if no peers then returns a collection with size() == 0.
      */
     public Collection<Thing42orNull<K, D>> getPeersAsCollection() {
-        Iterator iterator = peers.keySet().iterator();
+        Iterator<K> iterator = peers.keySet().iterator();
         ArrayList<Thing42orNull<K, D>> allPeers = new ArrayList<Thing42orNull<K, D>>(0);
         while(iterator.hasNext()) {
             K k = (K)iterator.next();
@@ -226,6 +226,7 @@ public class Thing42<K, D> extends Object implements Thing42orNull<K, D> {
      * @see #hashCode()
 	 */
 	@Override
+    @SuppressWarnings("unchecked")
 	public boolean equals(Object obj){
         Thing42<K, D> thing = (Thing42<K, D>) obj;
 

@@ -341,6 +341,58 @@ public class Thing42Test
         thing2.addPeer(thing2);
         thing1.equals(thing2);      
     }
+    
+     /**
+     * Test equality infinite loop for peers.
+     */
+    @Test(expected = StackOverflowError.class)
+    public void testEqualsPeersInfiniteLoop() {
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+        thing1.addPeer(thing1);
+        thing2.addPeer(thing2);
+        thing1.getPeersAsCollection().equals(thing2.getPeersAsCollection());      
+    }
+    
+    /**
+     * Test equality infinite loop for pool.
+     */
+    @Test(expected = StackOverflowError.class)
+    public void testEqualsPoolInfiniteLoop() {
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+        Thing42<Integer, String> thing2 = new Thing42<Integer, String>(0, 0, "test");
+        thing1.appendToPool(thing2);
+        thing2.appendToPool(thing1);
+        thing1.getPoolAsList().equals(thing2.getPoolAsList());      
+    }
+    
+    /**
+     * Tests equality of unordered peers and ordered pool
+     * by adding new objects in different orders.
+     */
+    @Test
+    public void testOrderPeersAndPool(){
+        Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
+    	Thing42<Integer, String> thing2 = new Thing42<Integer, String>(1, 0, "test");
+    	Thing42<Integer, String> thing3 = new Thing42<Integer, String>(3, 3, "test3");
+    	Thing42<Integer, String> thing4 = new Thing42<Integer, String>(4, 4, "test4");
+    	
+    	//add thing3 and thing4 in different order
+    	thing1.addPeer(thing3);
+    	thing1.addPeer(thing4);
+    	thing2.addPeer(thing4);
+    	thing2.addPeer(thing3);
+    		
+    	assertFalse(thing1 == thing2);    	
+    	assertTrue(thing1.getPeersAsCollection().equals(thing2.getPeersAsCollection()));
+    	
+    	thing1.appendToPool(thing3);
+    	thing1.appendToPool(thing4);
+    	thing2.appendToPool(thing4);
+    	thing2.appendToPool(thing3);
+    	assertFalse(thing1.getPoolAsList().equals(thing2.getPoolAsList()));
+    		
+    }
 
     /**
      * Tests equality of two Thing42 objects.
