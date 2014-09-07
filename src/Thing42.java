@@ -6,13 +6,36 @@ import java.util.Iterator;
 
 /**
  * Simple implementation of the Thing42orNull interface.
- * Uses a HashMap to hold peers and an ArrayList to represent the pool.
- * Duplicate peers are not allowed. 
+ * Duplicate peers are not allowed. <br />
+ * An object of type Thing42 has five attributes. There are two immutable attributes: a generic attribute known as 
+ * its key and an integer-valued attribute known as its level. There is also a generic mutable attribute known as its data. 
+ * In addition, each Thing42 object has an unordered collection, in the form of a HashMap, of Thing42 objects known as its peers as well as an ordered 
+ * collection, in the form of an ArrayList, of Thing42 objects known as its pool.<br/><br/>
+ *
+ * <pre>  +-----------+
+ *  |  Thing42  |
+ *  +-----------+
+ *  | Key       |
+ *  | Level     |
+ *  | Data      |
+ *  | Peers...  |
+ *  | Pool...   |
+ *  +-----------+</pre>
+ * <br/>
+ * Objects of type Thing42 are created using a constructor with the following signature:<br/>
+ * <span style="font-family: 'courier new', courier, monospace;">public Thing42(K key, long level, D data)</span>
+ *
  * 
  * @author Jamie Wohletz
+ * @author Stephen Yugel
+ * @author Kim Bui
+ * @author Eric Van Gelder
+ * @author Sterling Zerr
+ * @author Chris Moquin
+ * @author Paul Ankenman
  * @version 8/21/14
  */
-public class Thing42<K, D> implements Thing42orNull<K, D> {
+public class Thing42<K, D> extends Object implements Thing42orNull<K, D> {
     //Fields
     //Immutable
     private final K key;
@@ -31,7 +54,7 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
     private ArrayList<Thing42orNull<K, D>> pool;
   
     /**
-     * Thing42 constructor.
+     * Constructor for objects of class Thing42.
      */
     public Thing42(K key, long level, D data) {
         this.key = key;
@@ -41,10 +64,10 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         this.pool = new ArrayList<Thing42orNull<K, D>>(0); 
     }
     /** 
-     * Add a peer to this object's peers. Accepts duplicates.
+     * Add a peer to this object. <br />Accepts duplicates.
      * 
      * @param newPeer the peer to add
-     * @throws NullPointerException if newPeer is null
+     * @throws NullPointerException if the specified peer is null
      */
     public void addPeer(Thing42orNull<K, D> newPeer) throws NullPointerException {
         if(newPeer == null) {
@@ -59,10 +82,11 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         peers.get(k).add(newPeer); 
     }
     /**
-     * Append a Thing42 object to this object's pool. 
-     * Duplicate Thing42 objects are accepted. 
+     * Append a member to the pool of this object. 
+     * <br />Duplicate Thing42 objects are accepted. 
      * 
-     * @param newMember the object to add to this object's pool collection. 
+     * @param newMember the object to be appended to the pool
+     * @throws NullPointerException if the specified item is null
      */
     public void appendToPool(Thing42orNull<K, D> newMember) throws NullPointerException {
         if(newMember == null) {
@@ -71,34 +95,34 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         pool.add(newMember); 
     }
     /**
-     * Get this object's data.
+     * Access the data of this Thing42.
      *
-     * @return this object's data.
+     * @return the data of this object
      */
     public D getData() {
         return data;
     }
     /**
-     * Get this object's key.
+     * Access the key of this Thing42.
      * 
-     * @return this object's key.
+     * @return the key of this object
      */
     public K getKey() {
         return key;
     }
     /**
-     * Get this object's level.
+     * Access the level of this Thing42.
      * 
-     * @return this object's level.
+     * @return the level of this object
      */
     public long getLevel() {
         return level;
     }
     /**
-     * Access a peer matching the given key.
+     * Access a peer matching the specified key.
      * 
-     * @param key the key to find a peer with
-     * @return a peer with the given key, or null if no matching peers found
+     * @param key the search key
+     * @return any peer known by this object that matches the given key; null if no match
      */
     public Thing42orNull<K, D> getOnePeer(K key) {
         if(!peers.containsKey(key) || peers.get(key).size() == 0) {
@@ -109,9 +133,9 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         return peers.get(key).get(0); 
     }
     /**
-     * Access all peers known by this object.
+     * Access all peers.
      * 
-     * @return every peer stored in this object
+     * @return all peers known by this object; if no peers then returns a collection with size() == 0.
      */
     public Collection<Thing42orNull<K, D>> getPeersAsCollection() {
         Iterator iterator = peers.keySet().iterator();
@@ -125,10 +149,11 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         return allPeers; 
     }
     /**
-     * Access all peers corresponding to the given key. 
+     * Access all peers matching the specified key. 
      * 
-     * @param key the key to match peers against
-     * @return the peers matching the given key or a collection with size() == 0 if none found.
+     * @param key the search key
+     * @return all peers known by this object that match the given key;
+     * if no peer matches then returns a collection with size() == 0.
      */
     public Collection<Thing42orNull<K, D>> getPeersAsCollection(K key) {
         if(!peers.containsKey(key)) {
@@ -137,19 +162,20 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         return peers.get(key); 
     }
     /**
-     * Access the pool as a list.
+     * Access all members of the pool.
      * 
-     * @return this object's pool, or a List with size() == 0 if pool is empty
+     * @return all members of the pool known by this object;
+     * if no members then returns a List with size() == 0.
      */
     public List<Thing42orNull<K, D>> getPoolAsList() {
         return pool; 
     }
     /**
-     * Remove the first occurence of an object from the pool.
+     * Remove a single instance of the specified object from this object's pool.
      * 
-     * @param member the object to remove
-     * @throws NullPointerException if the given member is null
-     * @return true if the member was removed, false if not
+     * @param member the member to be removed from the pool
+     * @return true if a pool member was removed as a result of this call
+     * @throws NullPointerException if the specified parameter is null
      */
     public boolean removeFromPool(Thing42orNull<K, D> member) throws NullPointerException {
         if(member == null) {
@@ -159,12 +185,12 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         return pool.remove(member); 
     }
     /**
-     * Remove a peer from this object's peers collection. 
+     * Remove a single instance of the specified peer from this object.
      * 
-     * @param peer the peer to remove
-     * @throws NullPointerException if the given peer is null
-     * @return whether the peer was successfully removed
-    */
+     * @param peer the peer to be removed
+     * @return true if a peer was removed as a result of this call
+     * @throws NullPointerException if the specified peer is null
+     */
     public boolean removePeer(Thing42orNull<K, D> peer) {
         if(peer == null) {
             throw new NullPointerException();
@@ -178,29 +204,36 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         return peers.get(k).remove(peer); 
     }
     /**
-     * Update this Thing42's data. 
+     * Modify the data of this Thing42.
      * 
-     * @param newData the object to use as data
+     * @param newData the updated data for this object
      */
     public void setData(D newData) {
         this.data = newData;
     }
     
 	/**
-	 * Check if this Thing42 equals Object o.
+	 * Determines whether or not the specified Object
+     * is equal to this Thing42. The specified Object
+     * is equal to this Thing42 if it is an instance of
+     * Thing42; if its level is the same as this Thing42;
+     * and if its key, data, peers, and pool are the same
+     * as this Thing42 via the equals predicate.
 	 *
-	 * @param o - the object to check for equality
-	 * @return true if this is equal to o, false otherwise
+	 * @param obj an Object to be compared with this Thing42.
+	 * @return true if obj is an instance of Thing42 and has
+     * the same values; false otherwise.
+     * @see #hashCode()
 	 */
 	@Override
-	public boolean equals(Object o){
-        Thing42<K, D> thing = (Thing42<K, D>) o;
+	public boolean equals(Object obj){
+        Thing42<K, D> thing = (Thing42<K, D>) obj;
 
-		if (this == o)
+		if (this == obj)
         {
             return true;
         }
-        if (! (o instanceof Thing42))
+        if (! (obj instanceof Thing42))
         {
             return false;
         }
@@ -212,9 +245,9 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
 	}
 	
 	/**
-	 * Compute this Thing42's hashcode.
+	 * Returns the hashcode for this Thing42.
 	 *
-	 * @return hash code for this Thing42
+	 * @return the hashcode for this Thing42
 	 */
 	@Override
 	public int hashCode(){
