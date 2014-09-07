@@ -15,8 +15,8 @@ import java.util.Iterator;
 public class Thing42<K, D> implements Thing42orNull<K, D> {
     //Fields
     //Immutable
-    private final K KEY;
-    private final long LEVEL;
+    private final K key;
+    private final long level;
     //Mutable
     private D data;
 
@@ -34,8 +34,8 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
      * Thing42 constructor.
      */
     public Thing42(K key, long level, D data) {
-        this.KEY = key;
-        this.LEVEL = level;
+        this.key = key;
+        this.level = level;
         this.data = data;
         this.peers = new HashMap<K, ArrayList<Thing42orNull<K, D>>>(0);
         this.pool = new ArrayList<Thing42orNull<K, D>>(0); 
@@ -84,7 +84,7 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
      * @return this object's key.
      */
     public K getKey() {
-        return KEY;
+        return key;
     }
     /**
      * Get this object's level.
@@ -92,7 +92,7 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
      * @return this object's level.
      */
     public long getLevel() {
-        return LEVEL;
+        return level;
     }
     /**
      * Access a peer matching the given key.
@@ -204,8 +204,8 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
         {
             return false;
         }
-        return LEVEL == thing.getLevel()
-            && KEY.equals(thing.getKey())
+        return level == thing.getLevel()
+            && key.equals(thing.getKey())
             && data.equals(thing.getData())
             && this.getPeersAsCollection().equals(thing.getPeersAsCollection())
             && this.getPoolAsList().equals(thing.getPoolAsList());
@@ -220,9 +220,9 @@ public class Thing42<K, D> implements Thing42orNull<K, D> {
 	public int hashCode(){
 		int prime = 17;
 		int result = 1;
-		Long l = Long.valueOf(LEVEL);
+		Long l = Long.valueOf(level);
 		// to avoid NPE, if key or data is null, use 0, if not, use their hash
-		result = prime * result + ((KEY == null) ? 0 : KEY.hashCode());
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + l.hashCode();
 		result = prime * result + peers.hashCode();
