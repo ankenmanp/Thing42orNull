@@ -504,6 +504,11 @@ public class Thing42Test
 		assertTrue(thing1.hashCode() == thing2.hashCode());
     }
 	
+	/**
+	* Tests that the hashCode() method generates the same 
+	* hash codes when two Thing42 objects have the same 
+	* pool and peers collections. 
+	*/
 	@Test
 	public void testHashCodePeersAndPool(){
 		Thing42<Integer, String> thing1 = new Thing42<Integer, String>(0, 0, "test");
